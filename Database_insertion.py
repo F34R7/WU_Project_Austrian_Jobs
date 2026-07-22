@@ -4,7 +4,7 @@ import psycopg2
 Db_config = {
     "dbname": "bmi_data",
     "user": "postgres",
-    "password": "974029",
+    "password": "--",
     "host": "localhost",
     "port": "5432"
 }
