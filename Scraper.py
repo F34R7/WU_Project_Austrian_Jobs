@@ -37,7 +37,7 @@ with sync_playwright() as p:
             #page.wait_for_timeout(2)
         except Exception:
             break
-    count = len(id_lists)
+    count = 0
     df = pandas.DataFrame
     scraped_jobs = []
     # This try is there to save everything we did up until a point of failure (website not loading etc.)
