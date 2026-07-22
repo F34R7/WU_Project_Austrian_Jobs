@@ -22,7 +22,7 @@ try:
     id_lists = df_jobs["Unique_ID"].tolist()
 except:
     id_lists = []
-print(id_lists)
+#print(id_lists)
 # Make sure the data folder exists in order to save the relevant PDFs
 os.makedirs("data", exist_ok = True)
 
@@ -38,6 +38,7 @@ with sync_playwright() as p:
         except Exception:
             break
     count = 0
+    duplicate_count = 0
     df = pandas.DataFrame
     scraped_jobs = []
     # This try is there to save everything we did up until a point of failure (website not loading etc.)
@@ -58,6 +59,9 @@ with sync_playwright() as p:
                     if page.locator("text='Referenzcode:'").locator("xpath=following-sibling::*[1]").inner_text().strip() in id_lists:
                         print("Duplicate found")
                         count += 1
+                        duplicate_count += 1
+                        if duplicate_count >= 5:
+                            break
                         page.goto("https://bund.jobboerse.gv.at/sap/bc/jobs/index.html")
                         continue
                     # Use playwright to extract the necessary datapoints. Soup was considered as an alternative, but the resulting HTML is massive and very user unfriendly.
@@ -122,6 +126,7 @@ with sync_playwright() as p:
                         "Job General Summary" : general_summary,
                         "Base Data" : base_data,
                         "Job activites" : activities,
+                        "Requirements" : requirements,
                         "PDF URL" : URL_Link_PDF,
                         "Unique_ID" : Unique_ID
                     }
